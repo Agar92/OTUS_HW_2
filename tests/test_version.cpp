@@ -24,5 +24,5 @@ TEST(TEST_GOOGLETEST, Test1)
     std::cout<<"version="<<version()<<std::endl;
 
     ASSERT_NE(version(), 100);
-    ASSRRT_EQ(10,5*2);
+    ASSERT_EQ(10,5*2);
 }
