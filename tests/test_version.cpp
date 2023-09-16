@@ -22,5 +22,7 @@ BOOST_AUTO_TEST_SUITE_END()
 TEST(TEST_GOOGLETEST, Test1)
 {
     std::cout<<"version="<<version()<<std::endl;
+
     ASSERT_NE(version(), 100);
+    ASSRRT_EQ(10,5*2);
 }
