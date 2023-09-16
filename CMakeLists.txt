@@ -20,10 +20,30 @@ set_target_properties(${PROJECT_NAME}
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic -Werror
 )
 
+add_subdirectory(MakeIP)
+add_subdirectory(version)
+
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}")
 
-add_subdirectory(MakeIP)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE makeip)
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+
+
+set(CPACK_GENERATOR DEB)
+
+set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+
+set(CPACK_PACKAGE_CONTACT example@example.com)
+
+include(CPack)
+
+
+add_subdirectory(googletest)
+
+enable_testing()
+
+add_subdirectory(tests)
