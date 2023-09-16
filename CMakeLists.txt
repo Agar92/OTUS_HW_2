@@ -31,6 +31,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic -Werror
 add_subdirectory(MakeIP)
 add_subdirectory(version)
 
+
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}")
 
 
