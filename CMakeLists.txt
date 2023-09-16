@@ -1,15 +1,23 @@
 cmake_minimum_required(VERSION 3.15)
 
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
-set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
-project(ip_filter VERSION 1.2.3)
+project(ip_filter VERSION ${PROJECT_VERSION})
 
 configure_file(version.h.in version.h)
 
 message(STATUS "PROJECT_NAME=${PROJECT_NAME}")
 
-add_executable(${PROJECT_NAME} ip_filter.cpp)
+option(CHANGE_APPROACH "Choose 1 of 2 approaches (ip_filter1/2.cpp files) for solving the problem" OFF)
+
+if(CHANGE_APPROACH)
+  add_executable(${PROJECT_NAME} ip_filter2.cpp)
+  message(STATUS "ip_filter2.cpp is compiled.")
+else()
+  message(STATUS "ip_filter1.cpp is compiled.")
+  add_executable(${PROJECT_NAME} ip_filter1.cpp)
+endif()
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES
