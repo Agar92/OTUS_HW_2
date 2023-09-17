@@ -9,6 +9,8 @@
 #include "MakeIP/makeip.h"
 #include <comparator/comparator.h>
 
+#include <tuple>
+
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
 // ("..", '.') -> ["", "", ""]
@@ -34,93 +36,98 @@ std::vector<std::string> split(const std::string &str, char d)
     return r;
 }
 
-int main(int , char const **)
+
+std::vector<std::vector<std::string> > ip_pool;
+
+template <typename T>
+void filter(T atuple)
+{
+    const size_t tupsize=std::tuple_size<decltype(atuple)>::value;
+    if(tupsize == 0 || tupsize > 4) throw("Wrong size of input tuple!");
+
+    for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
+    {
+        bool flag=false;
+        if(std::stoi(*(ip->cbegin()+=0)) == std::get<0>(atuple) &&
+           std::get<0>(atuple) != 0)
+            flag=true;
+        else if(std::get<0>(atuple) != 0) continue;
+        if(std::stoi(*(ip->cbegin()+=1)) == std::get<1>(atuple) &&
+           std::get<1>(atuple) != 0)
+            flag=true;
+        else if(std::get<1>(atuple) != 0) continue;
+        if(std::stoi(*(ip->cbegin()+=2)) == std::get<2>(atuple) &&
+           std::get<2>(atuple) != 0)
+            flag=true;
+        else if(std::get<2>(atuple) != 0) continue;
+        if(std::stoi(*(ip->cbegin()+=3)) == std::get<3>(atuple) &&
+           std::get<3>(atuple) != 0)
+            flag=true;
+        else if(std::get<3>(atuple) != 0) continue;
+
+
+        if(flag)
+        {
+            for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
+            {
+                if (ip_part != ip->cbegin())
+                {
+                    std::cout << ".";
+                }
+                std::cout << *ip_part;
+            }
+            std::cout << std::endl;
+        }
+    }
+}
+
+void filter_any(int x)
+{
+    if(x < 0 || x > 255) throw("Wrong value of IP octet!");
+
+    for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
+    {
+        bool flag=false;
+        for(int j=0; j<4; ++j) if( std::stoi(*(ip->cbegin()+=j)) == x ) flag=true;
+
+        if(flag)
+        {
+            for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
+            {
+                if (ip_part != ip->cbegin())
+                {
+                    std::cout << ".";
+                }
+                std::cout << *ip_part;
+            }
+            std::cout << std::endl;
+        }
+    }
+}
+
+int main(int, char const **)
 {
     try
     {
-        std::vector<std::vector<std::string> > ip_pool;
-        std::vector<std::string> BigVec;
         for(std::string line; std::getline(std::cin, line);)
         {
             std::vector<std::string> v = split(line, '\t');
             ip_pool.push_back(split(v.at(0), '.'));
-            BigVec.push_back(v.at(0));
-            //std::cout<<"line="<<v.at(0)<<std::endl;
         }
-
-
-        vector<string> ips = sortIPAddress(BigVec);
-        for(std::string ip : ips)
-            std::cout<<ip<<std::endl;
-        //*
-        for(auto ip : ips){
-            const size_t index_dot=ip.find(".");
-            //std::cout<<"idot="<<index_dot<<std::endl;
-            if(index_dot == 1 && ip[0] == '1') std::cout<<ip<<std::endl;
-        }
-        for(auto ip : ips){
-            bool flag=true;
-            int count=0;
-            size_t start=0;
-            while(count<2){
-                const size_t end=ip.find(".");
-                auto s=ip.substr(start,end);
-                start=end+1;
-                if(count == 0 && std::stoi(s) != 46) flag=false;
-                if(count == 1 && std::stoi(s) != 70) flag=false;
-                count++;
-            }
-            if(flag) std::cout<<ip<<std::endl;
-        }
-        for(auto ip : ips){
-            bool flag=false;
-            int count=0;
-            size_t start=0;
-            size_t end=0;
-            while(count<3){
-                end=ip.find( ".", start);
-                auto s=ip.substr(start,end-start);
-                //std::cout<<"#"<<count<<" s="<<s<<" start="
-                //        <<start<<" e="<<end<<std::endl;
-                start=end+1;
-                if(std::stoi(s) == 46) flag=true;
-                count++;
-            }
-            auto s=ip.substr(start,ip.size());
-            //std::cout<<"ip="<<ip<<" s4="<<s<<std::endl;
-            if(std::stoi(s) == 46) flag=true;
-            if(flag) std::cout<<ip<<std::endl;
-        }
-        //*/
-
-
-/*
-        std::vector<unsigned int> ips;
-        for(std::vector<std::vector<std::string> >::const_iterator ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
-            ips.push_back(MakeIP((*ip)[0], (*ip)[1], (*ip)[2], (*ip)[3]));
-
-        std::sort(ips.begin(),ips.end(), std::greater<unsigned int>());
-        for(auto ip : ips) std::cout << MakeIP(ip) << std::endl;
-        for(auto ip : ips)
-            if( ((ip>>24)&0xFF) == 1) std::cout << MakeIP(ip) << std::endl;
-        for(auto ip : ips)
-            if( ((ip>>24)&0xFF) == 46 && ((ip>>16)&0xFF) == 70)
-                std::cout << MakeIP(ip) << std::endl;
-        for(auto ip : ips)
-            if( ((ip>>24)&0xFF) == 46 || ((ip>>16)&0xFF) == 46 || ((ip>>8)&0xFF) == 46 || (ip&0xFF) == 46)
-                std::cout << MakeIP(ip) << std::endl;
-*/
-
-
-
-        exit(0);
-
 
         // TODO reverse lexicographically sort
+        std::sort(ip_pool.begin(), ip_pool.end(),[](std::vector<std::string> a, std::vector<std::string> b) -> bool{
+            if(a == b) return false;
+            for(int i=0; i<4; ++i){
+                if(std::stoi(a[i]) < std::stoi(b[i])) return false;
+                else if(std::stoi(a[i]) > std::stoi(b[i])) return true;
+            }
+            return false;
+        });
 
-        for(std::vector<std::vector<std::string> >::const_iterator ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
+        for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
         {
-            for(std::vector<std::string>::const_iterator ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
+            for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
             {
                 if (ip_part != ip->cbegin())
                 {
@@ -131,6 +138,68 @@ int main(int , char const **)
             }
             std::cout << std::endl;
         }
+
+        // TODO filter by first byte and output
+        // ip = filter(1)
+        filter(std::make_tuple(1, 0, 0, 0));
+        /*
+        for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
+        {
+            if(std::stoi(*ip->cbegin()) == 1)
+            {
+                for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
+                {
+                    if (ip_part != ip->cbegin())
+                    {
+                        std::cout << ".";
+                    }
+                    std::cout << *ip_part;
+                }
+                std::cout << std::endl;
+            }
+        }
+        */
+        // TODO filter by first and second bytes and output
+        // ip = filter(46, 70)
+        filter(std::make_tuple(46, 70, 0, 0));
+        /*
+        for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
+        {
+            if(std::stoi(*ip->cbegin()) == 46 && std::stoi(*(ip->cbegin()+=1)) == 70)
+            {
+                for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
+                {
+                    if (ip_part != ip->cbegin())
+                    {
+                        std::cout << ".";
+                    }
+                    std::cout << *ip_part;
+                }
+                std::cout << std::endl;
+            }
+        }*/
+        // TODO filter by any byte and output
+        // ip = filter_any(46)
+        filter_any(46);
+        /*
+        for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
+        {
+            if(std::stoi(*ip->cbegin()) == 46 || std::stoi(*(ip->cbegin()+=1)) == 46 || std::stoi(*(ip->cbegin()+=2)) == 46 || std::stoi(*(ip->cbegin()+=3)) == 46
+            )
+            {
+                for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
+                {
+                    if (ip_part != ip->cbegin())
+                    {
+                        std::cout << ".";
+                    }
+                    std::cout << *ip_part;
+                }
+                std::cout << std::endl;
+            }
+        }
+        */
+
 
         // 222.173.235.246
         // 222.130.177.64
