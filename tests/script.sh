@@ -20,9 +20,9 @@ if [ -f $FILE ]; then
     if [ -f $OUTPUTFILE ]; then
       echo "$OUTPUTFILE found!"
     fi
-    exit 0
     echo "result=${result}"
     echo "result=${result} EXPECTED_RESULT=${EXPECTED_RESULT}"
+    exit 0
     if [ "$result" = "$EXPECTED_RESULT" ]; then
       echo "Check sums are the same. Good!"
       exit 0
