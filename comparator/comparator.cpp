@@ -7,14 +7,14 @@ bool customComparator(string a, string b) {
     vector<string> octetsB;
 
     string octet = "";
-    for (int i = 0; i < a.size(); i++) {
+    for (size_t i = 0; i < a.size(); i++) {
         if (a[i] == '.') octetsA.push_back(octet), octet = "";
         else octet += a[i];
     }
     octetsA.push_back(octet);
     //
     octet = "";
-    for (int i = 0; i < b.size(); i++) {
+    for (size_t i = 0; i < b.size(); i++) {
         if (b[i] == '.') octetsB.push_back(octet), octet = "";
         else octet += b[i];
     }
@@ -27,9 +27,9 @@ bool customComparator(string a, string b) {
 
     // Compare the octets and return the result
     for (int i = 0; i < 4; i++) {
-        if (std::stoi(octetsA[i]) > std::stoi(octetsB[i])) {
+        if (std::stoi(octetsA[i]) < std::stoi(octetsB[i])) {
             return false;
-        } else if (std::stoi(octetsA[i]) < std::stoi(octetsB[i])) {
+        } else if (std::stoi(octetsA[i]) > std::stoi(octetsB[i])) {
             return true;
         }
     }

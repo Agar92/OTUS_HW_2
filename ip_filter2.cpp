@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include "MakeIP/makeip.h"
+#include <comparator/comparator.h>
 
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
@@ -38,15 +39,62 @@ int main(int , char const **)
     try
     {
         std::vector<std::vector<std::string> > ip_pool;
+        std::vector<std::string> BigVec;
         for(std::string line; std::getline(std::cin, line);)
         {
             std::vector<std::string> v = split(line, '\t');
             ip_pool.push_back(split(v.at(0), '.'));
+            BigVec.push_back(v.at(0));
+            //std::cout<<"line="<<v.at(0)<<std::endl;
         }
 
 
+        vector<string> ips = sortIPAddress(BigVec);
+        for(std::string ip : ips)
+            std::cout<<ip<<std::endl;
+        //*
+        for(auto ip : ips){
+            const size_t index_dot=ip.find(".");
+            //std::cout<<"idot="<<index_dot<<std::endl;
+            if(index_dot == 1 && ip[0] == '1') std::cout<<ip<<std::endl;
+        }
+        for(auto ip : ips){
+            bool flag=true;
+            int count=0;
+            size_t start=0;
+            while(count<2){
+                const size_t end=ip.find(".");
+                auto s=ip.substr(start,end);
+                start=end+1;
+                if(count == 0 && std::stoi(s) != 46) flag=false;
+                if(count == 1 && std::stoi(s) != 70) flag=false;
+                count++;
+            }
+            if(flag) std::cout<<ip<<std::endl;
+        }
+        for(auto ip : ips){
+            bool flag=false;
+            int count=0;
+            size_t start=0;
+            size_t end=0;
+            while(count<3){
+                end=ip.find( ".", start);
+                auto s=ip.substr(start,end-start);
+                //std::cout<<"#"<<count<<" s="<<s<<" start="
+                //        <<start<<" e="<<end<<std::endl;
+                start=end+1;
+                if(std::stoi(s) == 46) flag=true;
+                count++;
+            }
+            auto s=ip.substr(start,ip.size());
+            //std::cout<<"ip="<<ip<<" s4="<<s<<std::endl;
+            if(std::stoi(s) == 46) flag=true;
+            if(flag) std::cout<<ip<<std::endl;
+        }
+        //*/
 
 
+/*
         std::vector<unsigned int> ips;
         for(std::vector<std::vector<std::string> >::const_iterator ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
             ips.push_back(MakeIP((*ip)[0], (*ip)[1], (*ip)[2], (*ip)[3]));
@@ -61,6 +109,10 @@ int main(int , char const **)
         for(auto ip : ips)
             if( ((ip>>24)&0xFF) == 46 || ((ip>>16)&0xFF) == 46 || ((ip>>8)&0xFF) == 46 || (ip&0xFF) == 46)
                 std::cout << MakeIP(ip) << std::endl;
+*/
+
+
+
         exit(0);
 
 

@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <vector>
+#include <string>
 
 using std::string;
 using std::vector;
