@@ -20,6 +20,7 @@ jobs:
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build .
       - run: cmake --build . --target test
+      - run: /home/runner/work/OTUS_HW_2/OTUS_HW_2/Testing/Temporary/LastTest.log
       - run: cmake --build . --target package
       - name: Create Release
         id: create_release
