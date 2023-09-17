@@ -14,8 +14,8 @@ if [ -f $FILE ]; then
     if [ -f $DATAFILE ]; then
       echo "$DATAFILE found!"
     fi
-    exit 0
     ./$FILE $DATAFILE > $OUTPUTFILE
+    exit 0
     result=$(md5sum $OUTPUTFILE)
     echo "result=${result}"
     echo "result=${result} EXPECTED_RESULT=${EXPECTED_RESULT}"
