@@ -10,6 +10,7 @@
 #include <comparator/comparator.h>
 
 #include <tuple>
+#include <memory>
 
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
@@ -39,6 +40,22 @@ std::vector<std::string> split(const std::string &str, char d)
 
 std::vector<std::vector<std::string> > ip_pool;
 
+void print(std::vector<std::vector<std::string>>::const_iterator & it, bool FLAG=true)
+{
+    if(FLAG)
+    {
+        for(auto ip_part = it->cbegin(); ip_part != it->cend(); ++ip_part)
+        {
+            if (ip_part != it->cbegin())
+            {
+                std::cout << ".";
+            }
+            std::cout << *ip_part;
+        }
+        std::cout << std::endl;
+    }
+}
+
 template <typename T>
 void filter(T atuple)
 {
@@ -64,20 +81,7 @@ void filter(T atuple)
            std::get<3>(atuple) != 0)
             flag=true;
         else if(std::get<3>(atuple) != 0) continue;
-
-
-        if(flag)
-        {
-            for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
-            {
-                if (ip_part != ip->cbegin())
-                {
-                    std::cout << ".";
-                }
-                std::cout << *ip_part;
-            }
-            std::cout << std::endl;
-        }
+        print(ip, flag);
     }
 }
 
@@ -89,30 +93,31 @@ void filter_any(int x)
     {
         bool flag=false;
         for(int j=0; j<4; ++j) if( std::stoi(*(ip->cbegin()+=j)) == x ) flag=true;
-
-        if(flag)
-        {
-            for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
-            {
-                if (ip_part != ip->cbegin())
-                {
-                    std::cout << ".";
-                }
-                std::cout << *ip_part;
-            }
-            std::cout << std::endl;
-        }
+        print(ip, flag);
     }
 }
 
-int main(int, char const **)
+int main(int argc, char const ** argv)
 {
     try
     {
-        for(std::string line; std::getline(std::cin, line);)
+        if(argc > 1)
         {
-            std::vector<std::string> v = split(line, '\t');
-            ip_pool.push_back(split(v.at(0), '.'));
+            std::string filename=std::string(argv[1]);
+            std::ifstream in(filename);
+            for(std::string line; std::getline(in, line);)
+            {
+                std::vector<std::string> v = split(line, '\t');
+                ip_pool.push_back(split(v.at(0), '.'));
+            }
+        }
+        else
+        {
+            for(std::string line; std::getline(std::cin, line);)
+            {
+                std::vector<std::string> v = split(line, '\t');
+                ip_pool.push_back(split(v.at(0), '.'));
+            }
         }
 
         // TODO reverse lexicographically sort
@@ -125,80 +130,17 @@ int main(int, char const **)
             return false;
         });
 
-        for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
-        {
-            for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
-            {
-                if (ip_part != ip->cbegin())
-                {
-                    std::cout << ".";
-
-                }
-                std::cout << *ip_part;
-            }
-            std::cout << std::endl;
-        }
+        for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip) print(ip);
 
         // TODO filter by first byte and output
         // ip = filter(1)
         filter(std::make_tuple(1, 0, 0, 0));
-        /*
-        for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
-        {
-            if(std::stoi(*ip->cbegin()) == 1)
-            {
-                for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
-                {
-                    if (ip_part != ip->cbegin())
-                    {
-                        std::cout << ".";
-                    }
-                    std::cout << *ip_part;
-                }
-                std::cout << std::endl;
-            }
-        }
-        */
         // TODO filter by first and second bytes and output
         // ip = filter(46, 70)
         filter(std::make_tuple(46, 70, 0, 0));
-        /*
-        for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
-        {
-            if(std::stoi(*ip->cbegin()) == 46 && std::stoi(*(ip->cbegin()+=1)) == 70)
-            {
-                for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
-                {
-                    if (ip_part != ip->cbegin())
-                    {
-                        std::cout << ".";
-                    }
-                    std::cout << *ip_part;
-                }
-                std::cout << std::endl;
-            }
-        }*/
         // TODO filter by any byte and output
         // ip = filter_any(46)
         filter_any(46);
-        /*
-        for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
-        {
-            if(std::stoi(*ip->cbegin()) == 46 || std::stoi(*(ip->cbegin()+=1)) == 46 || std::stoi(*(ip->cbegin()+=2)) == 46 || std::stoi(*(ip->cbegin()+=3)) == 46
-            )
-            {
-                for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
-                {
-                    if (ip_part != ip->cbegin())
-                    {
-                        std::cout << ".";
-                    }
-                    std::cout << *ip_part;
-                }
-                std::cout << std::endl;
-            }
-        }
-        */
 
 
         // 222.173.235.246
@@ -263,6 +205,10 @@ int main(int, char const **)
         // 46.49.43.85
         // 39.46.86.85
         // 5.189.203.46
+    }
+    catch(const char * msg)
+    {
+        std::cout<<msg<<std::endl;
     }
     catch(const std::exception &e)
     {

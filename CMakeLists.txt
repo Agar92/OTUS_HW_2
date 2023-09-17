@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.15)
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VERSION 8.8.${PATCH_VERSION})
 
+set(CMAKE_INSTALL_PREFIX  "/home/andrey/Desktop/install-OTUS_HW2")
+
 project(ip_filter VERSION ${PROJECT_VERSION})
 
 configure_file(version.h.in version.h)
@@ -40,6 +42,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}")
 target_link_libraries(${PROJECT_NAME} PRIVATE makeip)
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+install(FILES ip_filter.tsv DESTINATION data)
 
 
 set(CPACK_GENERATOR DEB)

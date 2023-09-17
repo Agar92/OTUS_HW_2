@@ -31,6 +31,11 @@ foreach(case_file ${test_cases})
              COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${case_name}_googletest
              WORKING_DIRECTORY
              ${PROJECT_BINARY_DIR}/tests)
+    install(TARGETS ${case_name}_googletest DESTINATION tests)
 endforeach()
+
+add_test(NAME script
+  COMMAND "${CMAKE_CURRENT_LIST_DIR}/script.sh" "${PROJECT_SOURCE_DIR}/ip_filter.tsv"
+  WORKING_DIRECTORY "${PROJECT_BINARY_DIR}")
 
 #add_test(NAME test_version_googletest COMMAND ./test_version)
