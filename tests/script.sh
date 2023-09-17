@@ -22,7 +22,7 @@ if [ -f $FILE ]; then
     fi
     echo "result=${result}"
     echo "result=${result} EXPECTED_RESULT=${EXPECTED_RESULT}"
-    exit 0
+#    exit 0
     if [ "$result" = "$EXPECTED_RESULT" ]; then
       echo "Check sums are the same. Good!"
       exit 0
