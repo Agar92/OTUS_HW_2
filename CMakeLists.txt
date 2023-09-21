@@ -26,6 +26,18 @@ else()
   add_executable(${PROJECT_NAME} ip_filter1.cpp)
 endif()
 
+add_custom_command(
+    TARGET ${PROJECT_NAME}
+    PRE_BUILD # Call this command pre-build
+    COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tests/run.py"
+    COMMENT "Generate Headers"
+)
+
+add_custom_command(TARGET ${PROJECT_NAME}
+    COMMAND echo "CMAKE_CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+
 set_target_properties(${PROJECT_NAME}
     PROPERTIES
       CXX_STANDARD 17
@@ -40,6 +52,38 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}")
 
 
 target_link_libraries(${PROJECT_NAME} PRIVATE makeip)
+
+
+# EVERY TIME YOU CHANGE /home/andrey/Desktop/OTUS_HW2/tests/globals.py
+# globals.h is recreated
+# trololo is rebuilt!!!
+# THIS COMMAND ALLOWS TO DO IT!
+# TO TRACK THE CHANGES IN THE FILE:
+# /home/andrey/Desktop/OTUS_HW2/tests/globals.py
+# and recreate globals.h and rebuild trololo only
+# and only when /home/andrey/Desktop/OTUS_HW2/tests/globals.py is modified!!!
+set(INPUT_FILENAME "${CMAKE_SOURCE_DIR}/tests/globals.py")
+set(OUTPUT_FILENAME "${CMAKE_SOURCE_DIR}/tests/globals.h")
+add_custom_command(
+  OUTPUT "${OUTPUT_FILENAME}"
+  COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tests/create_header.py"
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  DEPENDS "${INPUT_FILENAME}"
+)
+
+#message("CMAKE_PROJECT_DIR=${CMAKE_SOURCE_DIR}")
+
+add_executable(trololo "${CMAKE_SOURCE_DIR}/tests/test_globals.cpp" "${CMAKE_SOURCE_DIR}/tests/globals.h")
+target_include_directories(trololo PRIVATE "${CMAKE_SOURCE_DIR}")
+
+##RUNS ALWAYS, EVERY CALL of make command
+#add_custom_target(
+# run ALL
+# COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/#create_header.py"
+# BYPRODUCTS globals.h
+# COMMENT "Generating enums"
+#)
+
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 install(FILES ip_filter.tsv DESTINATION data)
