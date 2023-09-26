@@ -10,7 +10,7 @@ print("@@@")
 
 #https://stackoverflow.com/questions/19009932/import-arbitrary-python-source-file-python-3-3 :
 import importlib.machinery
-loader=importlib.machinery.SourceFileLoader('vars', '/home/andrey/Desktop/OTUS_HW2/tests/vars.py')
+loader=importlib.machinery.SourceFileLoader('vars', '/home/runner/work/OTUS_HW_2/OTUS_HW_2/tests/vars.py')
 vars = loader.load_module()
 print(vars.var_a)
 print(vars.var_b)
