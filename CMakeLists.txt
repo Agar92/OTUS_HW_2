@@ -71,7 +71,7 @@ set(INPUT_FILENAME "${CMAKE_SOURCE_DIR}/tests/globals.py")
 set(OUTPUT_FILENAME "${CMAKE_SOURCE_DIR}/tests/globals.h")
 add_custom_command(
   OUTPUT "${OUTPUT_FILENAME}"
-  COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tests/create_header.py"
+  COMMAND ${Python_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tests/create_header.py"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS "${INPUT_FILENAME}"
 )
@@ -84,7 +84,7 @@ target_include_directories(trololo PRIVATE "${CMAKE_SOURCE_DIR}")
 ##RUNS ALWAYS, EVERY CALL of make command
 #add_custom_target(
 # run ALL
-# COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/#create_header.py"
+# COMMAND ${Python_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tests/#create_header.py"
 # BYPRODUCTS globals.h
 # COMMENT "Generating enums"
 #)
