@@ -1,8 +1,8 @@
 import re
 import sys
 
-input_filename="/home/runner/work/OTUS_HW_2/OTUS_HW_2/globals.py"
-output_filename="/home/runner/work/OTUS_HW_2/OTUS_HW_2/globals.h"
+input_filename="/home/runner/work/OTUS_HW_2/OTUS_HW_2/tests/globals.py"
+output_filename="/home/runner/work/OTUS_HW_2/OTUS_HW_2/tests/globals.h"
 
 
 #a="asd"
