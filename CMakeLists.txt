@@ -26,6 +26,8 @@ else()
   add_executable(${PROJECT_NAME} ip_filter1.cpp)
 endif()
 
+file(CHMOD "${CMAKE_SOURCE_DIR}/tests/run.py" PERMISSIONS OWNER_READ  OWNER_WRITE OWNER_EXECUTE)
+
 add_custom_command(
     TARGET ${PROJECT_NAME}
     PRE_BUILD # Call this command pre-build
