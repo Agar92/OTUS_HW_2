@@ -30,7 +30,7 @@ file(CHMOD "${CMAKE_SOURCE_DIR}/tests/run.py" PERMISSIONS OWNER_READ  OWNER_WRIT
 
 #find Python:
 find_package(Python COMPONENTS Interpreter REQUIRED)
-message(STATUS "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}")
+message(STATUS "PYTHON_EXECUTABLE=${Python_EXECUTABLE}")
 add_custom_command(
     TARGET ${PROJECT_NAME}
     PRE_BUILD # Call this command pre-build
