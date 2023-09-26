@@ -23,7 +23,7 @@ import os
 print(os.getcwd())
 
 myvars = {}
-with open("/home/runner/work/OTUS_HW_2/OTUS_HW_2/tests/vars.py") as myfile:
+with open('/home/runner/work/OTUS_HW_2/OTUS_HW_2/tests/vars.py') as myfile:
     for line in myfile:
         name, var = line.partition("=")[::2]
         if isinstance(var, str):#if type(var) == str:
@@ -39,7 +39,7 @@ print(myvars)
 #one more approach to xml file:
 import configparser
 config = configparser.ConfigParser()
-config.read("/home/runner/work/OTUS_HW_2/OTUS_HW_2/tests/vars.txt")
+config.read('/home/runner/work/OTUS_HW_2/OTUS_HW_2/tests/vars.txt')
 var_a = config.get("myvars", "var_a")
 var_b = config.get("myvars", "var_b")
 var_c = config.get("myvars", "var_c")
