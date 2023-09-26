@@ -34,7 +34,7 @@ message(STATUS "PYTHON_EXECUTABLE=${Python_EXECUTABLE}")
 add_custom_command(
     TARGET ${PROJECT_NAME}
     PRE_BUILD # Call this command pre-build
-    COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tests/run.py"
+    COMMAND ${Python_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tests/run.py"
     COMMENT "Generate Headers"
 )
 
