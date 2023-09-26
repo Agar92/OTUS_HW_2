@@ -27,7 +27,7 @@ else()
 endif()
 
 file(CHMOD "${CMAKE_SOURCE_DIR}/tests/run.py" PERMISSIONS OWNER_READ  OWNER_WRITE OWNER_EXECUTE)
-
+execute_process(COMMAND chmod +x tests/run.py)
 #find Python:
 find_package(Python COMPONENTS Interpreter REQUIRED)
 message(STATUS "PYTHON_EXECUTABLE=${Python_EXECUTABLE}")
