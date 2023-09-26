@@ -21,6 +21,7 @@ jobs:
           python-version: '3.10'
       - run: sudo apt-get update && sudo apt-get install cmake libboost-test-dev -y
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DCHANGE_APPROACH=ON
+      - run: pwd
       - run: ls -altr
       - run: ls tests/ -altr
       - run: cmake --build .
