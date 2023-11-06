@@ -11,7 +11,7 @@ set_target_properties(${LIB}
 target_compile_options(${LIB} PRIVATE -Wall -Wextra -pedantic -Werror
 )
 
-target_include_directories(${LIB} PUBLIC ${CMAKE_SOURCE_DIR})
+target_include_directories(${LIB} PUBLIC ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 target_link_libraries(${LIB} PUBLIC makeip)
 
 install(TARGETS ${LIB} LIBRARY DESTINATION lib)

@@ -1,20 +1,23 @@
-set -eu
+#set -eu
 
 #pwd
 #exit 0
-
 FILE="ip_filter"
 #DATAFILE="../OTUS_HW2/ip_filter.tsv"
 DATAFILE="$1"
+echo "Hello! DATAFILE=${DATAFILE}"
 echo "DATAFILE=${DATAFILE}"
 OUTPUTFILE="output.dat"
 EXPECTED_RESULT="24e7a7b2270daee89c64d3ca5fb3da1a  output.dat"
+
 if [ -f $FILE ]; then
     echo "File found!"
     if [ -f $DATAFILE ]; then
       echo "$DATAFILE found!"
     fi
+    echo "STEP #1 DATAFILE=${DATAFILE}"
     ./$FILE $DATAFILE > $OUTPUTFILE
+    echo "STEP #2"
     result=$(md5sum $OUTPUTFILE)
     md5sum --v
     if [ -f $OUTPUTFILE ]; then
